@@ -1,13 +1,27 @@
 import React from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import { registerValidationSchema } from '../schemas'
+import { createUser } from '../api/apidev'
+import useAuth from '../hooks/useAuth'
+
 
 function Register() {
+
+  const {setAuth} = useAuth()
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const from = location.state?.from?.pathname || "/"
+
   const {register, handleSubmit, formState: {errors}} = useForm({resolver: yupResolver(registerValidationSchema)});
 
-  const submit = (data) => {
-    console.log(data)
+  const submit = async (formData) => {
+    const response = await createUser(formData)
+    setAuth(response)
+    navigate(from, {replace: true})
   }
   return (
     <div>
@@ -32,7 +46,7 @@ function Register() {
 
             <button type='submit'>Submit</button>
         </form>
-        <p>If you already have an account please click <a onClick={() => {console.log("hello")}}>here</a> to login</p>
+        <p>If you already have an account please click <a href='/login'>here</a> to login</p>
     </div>
   )
 }
