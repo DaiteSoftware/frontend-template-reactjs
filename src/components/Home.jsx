@@ -4,20 +4,30 @@ import { useLocation, Navigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 function Home() {
+  const [procedure, setProcedure] = useState("")
   const [users, setUsers] = useState([]);
-  const { auth } = useAuth();
+  const { auth } = useAuth({});
   const location = useLocation();
 
   useEffect(() => {
-    
   }, []);
-  return auth?.session ? (
+  const submit = (event) => {
+    event.preventDefault()
+    const data = {procedure: procedure}
+  }
+  return auth.token ? (
     <div>
-      <ul>
-        {users.map((item, index) => {
-          return <li key={index}>{item.email}</li>;
-        })}
-      </ul>
+      <h1>Bienvenido {auth.user}</h1>
+      <form onSubmit={submit}>
+      <input
+          name="procedure"
+          type="procedure"
+          value={procedure}
+          onChange={(event) => setProcedure(event.target.value)}
+          placeholder="Procedure..."
+        />
+      <button>Submit</button>
+      </form>
     </div>
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

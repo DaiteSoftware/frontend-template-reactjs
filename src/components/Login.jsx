@@ -15,14 +15,15 @@ function Login() {
   const submit = async (event) => {
     event.preventDefault();
     const data = { username: user, password: password };
-    const resp = await authUser(data);
-    console.log(resp)
-    // if (resp.session) {
-    //   setAuth(resp);
-    //   navigate(from, { replace: true });
-    // } else {
-    //   setError(resp.response.data.error);
-    // }
+    authUser(data).then((res) => {
+      setAuth(
+        { user: res.user,
+          token: res.accessToken}
+      )
+      navigate('/')
+    }).catch((res) => {
+      setError(res.data.error)
+    })
   };
   return (
     <div>
