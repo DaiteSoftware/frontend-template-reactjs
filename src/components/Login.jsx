@@ -2,10 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { authUser } from "../api/apidev";
+import { authUser } from "../api/index";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -14,24 +14,25 @@ function Login() {
 
   const submit = async (event) => {
     event.preventDefault();
-    const data = { email: email, password: password };
+    const data = { username: user, password: password };
     const resp = await authUser(data);
-    if (resp.session) {
-      setAuth(resp);
-      navigate(from, { replace: true });
-    } else {
-      setError(resp.response.data.error);
-    }
+    console.log(resp)
+    // if (resp.session) {
+    //   setAuth(resp);
+    //   navigate(from, { replace: true });
+    // } else {
+    //   setError(resp.response.data.error);
+    // }
   };
   return (
     <div>
       <form onSubmit={submit}>
         <input
-          name="email"
-          type="email"
-          onChange={(event) => setEmail(event.target.value)}
-          value={email}
-          placeholder="Email..."
+          name="user"
+          type="text"
+          onChange={(event) => setUser(event.target.value)}
+          value={user}
+          placeholder="User..."
         />
         <input
           name="password"

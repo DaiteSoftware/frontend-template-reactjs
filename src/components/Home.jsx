@@ -1,9 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { getUsers } from "../api/apidev";
 import useAuth from "../hooks/useAuth";
-import MyAxios from "../api/apidev";
 
 function Home() {
   const [users, setUsers] = useState([]);
@@ -11,11 +9,7 @@ function Home() {
   const location = useLocation();
 
   useEffect(() => {
-    const startFetching = async () => {
-      const response = await getUsers(auth.session.token);
-      setUsers(response.data);
-    };
-    startFetching();
+    
   }, []);
   return auth?.session ? (
     <div>

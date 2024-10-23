@@ -1,15 +1,15 @@
 import axios from "axios";
 
-const URL = "localhost:8080/api";
+const URL = "http://localhost:8080/api/";
 
 const MyAxios = axios.create({ baseURL: URL });
 
-export function authUser(user) {
+export const authUser = (user) => {
   return new Promise((success, reject) => {
-    MyAxios.post("/login", user, { headers: { "Content-Type": "text/plain" } })
-      .then(({ data }) => {
+    MyAxios.post("login", user, { headers: { "Content-Type": "application/json" } })
+      .then((res) => {
         console.log("API correctly fetching");
-        success(data);
+        success(res);
       })
       .catch((error) => {
         console.log("API Error");
@@ -17,5 +17,3 @@ export function authUser(user) {
       });
   });
 }
-
-export default MyAxios;
