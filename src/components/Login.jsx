@@ -18,7 +18,7 @@ function Login() {
     authUser(data)
       .then((res) => {
         setAuth({ user: res.user, token: res.accessToken });
-        navigate("/");
+        navigate(from);
       })
       .catch((res) => {
         setError(res.data.error);
