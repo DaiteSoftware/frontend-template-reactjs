@@ -5,7 +5,6 @@ const PrivateRoute = () => {
   const { auth } = useAuth();
 
   const isAuthenticated = auth?.user;
-
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 

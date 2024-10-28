@@ -9,7 +9,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const from = location.state?.from?.pathname || "/";
 
   const submit = async (event) => {
@@ -17,11 +17,10 @@ function Login() {
     const data = { username: user, password: password };
     authUser(data)
       .then((res) => {
-        setAuth({ user: res.user, token: res.accessToken });
-        navigate("/");
+        setAuth({ user: res.user });
+        navigate(from, {replace: true});
       })
       .catch((res) => {
-        console.log(res);
         setError(res.data.error);
       });
   };
