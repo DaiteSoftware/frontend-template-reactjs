@@ -2,11 +2,11 @@ import axios from "axios";
 
 const URL = "http://localhost:8080/api";
 
-const MyAxios = axios.create({ baseURL: URL });
+const MyAxios = axios.create({ baseURL: URL } );
 
 export const authUser = (user) => {
   return new Promise((success, reject) => {
-    MyAxios.post("login", user, { headers: { "Content-Type": "application/json" } })
+    MyAxios.post("login", user, { headers: { "Content-Type": "application/json" }, withCredentials: true })
       .then(({data}) => {
         console.log("API correctly fetching");
         success(data);

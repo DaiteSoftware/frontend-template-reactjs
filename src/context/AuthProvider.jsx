@@ -4,14 +4,9 @@ import { createContext, useState, useEffect } from "react";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(() => {
-    const storedAuth = sessionStorage.getItem("auth");
-    return storedAuth ? JSON.parse(storedAuth) : {};
-  });
+  const [auth, setAuth] = useState()
 
-  useEffect(() => {
-    sessionStorage.setItem("auth", JSON.stringify(auth));
-  }, [auth]);
+
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
