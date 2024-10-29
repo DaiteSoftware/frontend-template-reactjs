@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Home from "./components/Home";
-import "./App.css";
-import NotFoundPage from "./components/NotFoundPage";
-import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./context/AuthProvider";
+import {PrivateRoute} from "./components/PrivateRoute";
+import { Home } from "./pages/Home";
+import { Login } from "./pages/Login";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 function App() {
   return (

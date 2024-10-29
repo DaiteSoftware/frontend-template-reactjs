@@ -1,16 +1,14 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { useLocation, Navigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { Navbar } from "../components/Navbar";
 
-function Home() {
+export const Home = () => {
   const { auth } = useAuth({});
 
   return (
     <div>
+      <Navbar />
       <h1>Bienvenido {auth?.user?.usuario}</h1>
     </div>
   )
 }
-
-export default Home;
