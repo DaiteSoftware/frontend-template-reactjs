@@ -6,7 +6,6 @@ import Dlogo from "../assets/images/daite.png";
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const dropdownRef = useRef(null);
 
   const toggleMenu = () => setOpen(!open);
@@ -21,20 +20,18 @@ export const Navbar = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <header className="antialiased bg-slate-300 dark-mode:bg-gray-900">
-      <nav className="w-full bg-primary dark-mode:text-gray-200 dark-mode:bg-gray-800 text-white">
+      <nav className="w-full bg-primary dark-mode:text-gray-200 dark-mode:bg-gray-800 text-colorText border border-borderColor">
         <div className="flex items-center justify-between p-4 max-w-screen-xl mx-auto">
           <Link
             to="/"
-            className="text-lg font-semibold tracking-widest text-white uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline"
+            className="text-lg font-semibold tracking-widest text-colorText uppercase rounded-lg dark-mode:text-colorText focus:outline-none focus:shadow-outline"
           >
-            Daite
+            <img src={Dlogo} className="w-10" alt="Daite Logo" />
           </Link>
 
           <button
@@ -61,14 +58,14 @@ export const Navbar = () => {
           <div
             className={`${
               open ? "translate-x-0" : "-translate-x-full"
-            } md:translate-x-0 fixed inset-y-0 left-0 z-50 w-3/4 md:w-auto bg-primary text-white transform transition-transform duration-500 ease-in-out md:relative md:flex md:flex-row md:space-x-4`}
+            } md:translate-x-0 fixed inset-y-0 left-0 z-50 w-3/4 md:w-auto bg-primary text-colorText transform transition-transform duration-500 ease-in-out md:relative md:flex md:flex-row md:space-x-4`}
           >
-            <div className="flex justify-center w-full md:hidden mt-3 mb-3">
-              <img src={Dlogo} className="w-16" alt="Daite Logo" />
+            <div className="flex justify-center w-full md:hidden mt-3 mb-3 border border-borderColor text-lg">
+              <img src={Dlogo} className="w-12" alt="Daite Logo" />
             </div>
             <Link
               to="/"
-              className="px-4 py-2 md:text-sm sm:text-sm font-semibold rounded-lg hover:bg-hoverColor focus:outline-none items-center flex"
+              className="px-4 py-2 md:text-sm sm:text-sm font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none items-center flex"
               onClick={closeMenu}
             >
               <FaHome /> Home
@@ -76,7 +73,7 @@ export const Navbar = () => {
 
             <Link
               to="/about"
-              className="block px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor focus:outline-none"
+              className="block px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none"
               onClick={closeMenu}
             >
               About
@@ -85,7 +82,7 @@ export const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <Link
                 onClick={toggleDropdown}
-                className=" px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor focus:outline-none flex items-center"
+                className="px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none flex items-center"
               >
                 Services
                 <FaChevronDown
@@ -95,48 +92,49 @@ export const Navbar = () => {
                 />
               </Link>
 
-              {dropdownOpen && (
-                <div
-                  className="w-full mt-2 bg-primary rounded-md shadow-lg md:absolute md:left-0 md:w-48 transition-all duration-300 transform scale-95 origin-top"
-                  style={{ opacity: dropdownOpen ? 1 : 0 }}
+              <div
+                className={`transform transition-transform origin-top duration-300 ${
+                  dropdownOpen
+                    ? "scale-100 opacity-100 visible"
+                    : "scale-95 opacity-0 invisible"
+                } absolute left-0 mt-2 w-48 bg-primary rounded-md shadow-lg`}
+              >
+                <Link
+                  to="/web-development"
+                  className="block px-4 py-2 text-colorText hover:bg-hoverColor hover:text-textHoverColor"
+                  onClick={() => {
+                    closeDropdown();
+                    closeMenu();
+                  }}
                 >
-                  <Link
-                    to="/web-development"
-                    className="block px-4 py-2 text-white hover:bg-hoverColor"
-                    onClick={() => {
-                      closeDropdown();
-                      closeMenu();
-                    }}
-                  >
-                    Web Development
-                  </Link>
-                  <Link
-                    to="/app-development"
-                    className="block px-4 py-2 text-white hover:bg-hoverColor"
-                    onClick={() => {
-                      closeDropdown();
-                      closeMenu();
-                    }}
-                  >
-                    App Development
-                  </Link>
-                  <Link
-                    to="/seo"
-                    className="block px-4 py-2 text-white hover:bg-hoverColor"
-                    onClick={() => {
-                      closeDropdown();
-                      closeMenu();
-                    }}
-                  >
-                    SEO Services
-                  </Link>
-                </div>
-              )}
+                  Web Development
+                </Link>
+                <Link
+                  to="/app-development"
+                  className="block px-4 py-2 text-colorText hover:bg-hoverColor hover:text-textHoverColor"
+                  onClick={() => {
+                    closeDropdown();
+                    closeMenu();
+                  }}
+                >
+                  App Development
+                </Link>
+                <Link
+                  to="/seo"
+                  className="block px-4 py-2 text-colorText hover:bg-hoverColor hover:text-textHoverColor"
+                  onClick={() => {
+                    closeDropdown();
+                    closeMenu();
+                  }}
+                >
+                  SEO Services
+                </Link>
+              </div>
             </div>
 
             <Link
               to="/contact"
-              className="block px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor focus:outline-none"
+              className="block px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none"
               onClick={closeMenu}
             >
               Contact
