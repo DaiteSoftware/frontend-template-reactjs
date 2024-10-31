@@ -1,6 +1,5 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
-// import { Navbar } from "../components/Navbar";
 
 export const Home = () => {
   const { auth } = useAuth({});
