@@ -24,6 +24,7 @@ export const Login = ()  => {
         setError(res.data.error);
       });
   };
+  
   return (
     <section className="bg-blue-800 bg-opacity-100 min-h-screen flex flex-col items-center justify-center">
       <article className="max-w-lg p-10 bg-white border border-gray-200 rounded-lg shadow lg:w-[500px]">
