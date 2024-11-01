@@ -1,27 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+// Navbar.js
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaChevronDown } from "react-icons/fa";
+import Dropdown from "./Dropdown";
 import Dlogo from "../assets/images/daite.png";
+import Dlogotipo from "../assets/images/logotipo.png";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
   const toggleMenu = () => setOpen(!open);
   const closeMenu = () => setOpen(false);
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-  const closeDropdown = () => setDropdownOpen(false);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        closeDropdown();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
     <header className="antialiased bg-slate-300 dark-mode:bg-gray-900">
@@ -60,16 +47,20 @@ export const Navbar = () => {
               open ? "translate-x-0" : "-translate-x-full"
             } md:translate-x-0 fixed inset-y-0 left-0 z-50 w-3/4 md:w-auto bg-primary text-colorText transform transition-transform duration-500 ease-in-out md:relative md:flex md:flex-row md:space-x-4`}
           >
-            <div className="flex justify-center w-full md:hidden mt-3 mb-3 border border-borderColor text-lg">
-              <img src={Dlogo} className="w-12" alt="Daite Logo" />
+            <div className=" w-full flex justify-center border-b-2 border-borderColor py-4 md:hidden lg:hidden 2xl:hidden ">
+              <img
+                src={Dlogotipo}
+                alt="Logo"
+                className="w-32  flex justify-center"
+              />
             </div>
 
             <Link
               to="/"
-              className="px-4 py-2 md:text-sm sm:text-sm font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none items-center flex"
+              className="px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none items-center flex"
               onClick={closeMenu}
             >
-              <FaHome /> Home
+              Home
             </Link>
 
             <Link
@@ -80,56 +71,23 @@ export const Navbar = () => {
               About
             </Link>
 
-            <div className="relative" ref={dropdownRef}>
-              <Link
-                onClick={toggleDropdown}
-                className="px-4 py-2 font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none flex items-center"
-              >
-                Services
-                <FaChevronDown
-                  className={`ml-1 transition-transform duration-300 ${
-                    dropdownOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </Link>
+            <Dropdown
+              label="Services"
+              options={[
+                { label: "Web Development", path: "/web-development" },
+                { label: "App Development", path: "/app-development" },
+                { label: "SEO Services", path: "/seo-services" },
+              ]}
+            />
 
-              <div
-                className={`${
-                  dropdownOpen ? "block" : "hidden"
-                } md:absolute md:top-full md:left-0 mt-2 md:w-48 bg-white border border-borderColor rounded-md shadow-lg md:z-10`}
-              >
-                <Link
-                  to="/web-development"
-                  className="block px-4 py-2 text-colorText hover:bg-hoverColor hover:text-textHoverColor"
-                  onClick={() => {
-                    closeDropdown();
-                    closeMenu();
-                  }}
-                >
-                  Web Development
-                </Link>
-                <Link
-                  to="/app-development"
-                  className="block px-4 py-2 text-colorText hover:bg-hoverColor hover:text-textHoverColor"
-                  onClick={() => {
-                    closeDropdown();
-                    closeMenu();
-                  }}
-                >
-                  App Development
-                </Link>
-                <Link
-                  to="/seo"
-                  className="block px-4 py-2 text-colorText hover:bg-hoverColor hover:text-textHoverColor"
-                  onClick={() => {
-                    closeDropdown();
-                    closeMenu();
-                  }}
-                >
-                  SEO Services
-                </Link>
-              </div>
-            </div>
+            <Dropdown
+              label="Registro"
+              options={[
+                { label: "Web Development", path: "/web-development" },
+                { label: "App Development", path: "/app-development" },
+                { label: "SEO Services", path: "/seo-services" },
+              ]}
+            />
 
             <Link
               to="/contact"
