@@ -63,6 +63,7 @@ export const Navbar = () => {
             <div className="flex justify-center w-full md:hidden mt-3 mb-3 border border-borderColor text-lg">
               <img src={Dlogo} className="w-12" alt="Daite Logo" />
             </div>
+
             <Link
               to="/"
               className="px-4 py-2 md:text-sm sm:text-sm font-semibold rounded-lg hover:bg-hoverColor hover:text-textHoverColor focus:outline-none items-center flex"
@@ -93,11 +94,9 @@ export const Navbar = () => {
               </Link>
 
               <div
-                className={`transform transition-transform origin-top duration-300 ${
-                  dropdownOpen
-                    ? "scale-100 opacity-100 visible"
-                    : "scale-95 opacity-0 invisible"
-                } absolute left-0 mt-2 w-48 bg-primary rounded-md shadow-lg`}
+                className={`${
+                  dropdownOpen ? "block" : "hidden"
+                } md:absolute md:top-full md:left-0 mt-2 md:w-48 bg-white border border-borderColor rounded-md shadow-lg md:z-10`}
               >
                 <Link
                   to="/web-development"
