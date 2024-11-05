@@ -1,6 +1,5 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
-import { Navbar } from "../components/Navbar";
 import { Form } from "../components/Form/Form";
 
 export const Home = () => {
@@ -8,8 +7,7 @@ export const Home = () => {
 
   return (
     <div>
-      <Navbar />
       <Form />
     </div>
-  )
-}
+  );
+};
