@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TableFilter from "./Filter";
-import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 
 const TableComponent = ({ data = [], search }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -57,54 +57,38 @@ const TableComponent = ({ data = [], search }) => {
     });
   };
 
-  const renderPaginationButtons = () => {
-    const pages = [];
-    pages.push(1);
-
-    if (currentPage === 1) {
-      pages.push(2);
-    } else if (currentPage === totalPages) {
-      pages.push(totalPages - 1);
-    } else {
-      pages.push(currentPage);
+  const next = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
     }
-    pages.push(totalPages);
+  };
 
-    return pages.map((page, index) => (
-      <button
-        key={index}
-        onClick={() => goToPage(page)}
-        className={`px-2 py-1 rounded-md text-sm ${
-          currentPage === page
-            ? "bg-hoverColor text-white border border-borderColor hover:text-textHoverColor"
-            : "bg-white text-gray-700 hover:bg-gray-400"
-        }`}
-      >
-        {page}
-      </button>
-    ));
+  const prev = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
   };
 
   return (
-    <div className="p-2 flex flex-col items-center">
+    <div className="p-1 flex flex-col items-center text-xs">
       {search && (
-        <div className="pb-1 w-full md:w-3/4">
+        <div className="pb-1 w-full">
           <input
             type="text"
             placeholder="Buscar..."
             value={searchTerm}
             onChange={handleSearch}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-focusColor"
+            className="w-full p-1 border rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-focusColor"
           />
         </div>
       )}
 
       <div className="overflow-y-auto max-h-[400px] w-full custom-scrollbar relative">
-        <table className="w-full text-sm text-left text-gray-700 border border-gray-300">
+        <table className="w-full text-xs text-left text-gray-700 border border-gray-300">
           <thead className="bg-mainTableColor text-white sticky top-0 z-10">
             <tr>
               {selectedColumns.map((col) => (
-                <th key={col} className="px-4">
+                <th key={col} className="px-2 py-1">
                   {col
                     .replace(/_/g, " ")
                     .replace(/\b\w/g, (l) => l.toUpperCase())}
@@ -117,7 +101,7 @@ const TableComponent = ({ data = [], search }) => {
               currentData.map((row, index) => (
                 <tr key={index} className="odd:bg-white even:bg-gray-100">
                   {selectedColumns.map((col) => (
-                    <td key={col} className="px-4 border-t">
+                    <td key={col} className="px-2 py-1 border-t">
                       {row[col] ? row[col].toString() : "N/A"}
                     </td>
                   ))}
@@ -127,7 +111,7 @@ const TableComponent = ({ data = [], search }) => {
               <tr>
                 <td
                   colSpan={selectedColumns.length}
-                  className="px-4 py-2 text-center"
+                  className="px-2 py-1 text-center"
                 >
                   No hay datos disponibles
                 </td>
@@ -137,31 +121,36 @@ const TableComponent = ({ data = [], search }) => {
         </table>
       </div>
 
-      {data.length > 0 && (
-        <div className="flex justify-between items-center w-full md:w-3/4 mt-4">
-          {/* Filtro de columnas */}
+      {data.length > 0 && totalPages > 1 && (
+        <div className="flex justify-between items-center w-full mt-2">
           <TableFilter
             columns={data.length > 0 ? Object.keys(data[0]) : []}
             selectedColumns={selectedColumns}
             onToggleColumn={handleColumnToggle}
           />
 
-          {/* Paginación */}
-          <div className="flex space-x-1">
+          <div className="flex items-center gap-8">
             <button
-              onClick={() => goToPage(currentPage - 1)}
+              onClick={prev}
               disabled={currentPage === 1}
-              className="px-2 py-1 bg-white text-gray-700 hover:bg-hoverColor border border-borderColor hover:text-textHoverColor disabled:opacity-50 rounded-md"
+              className={`p-1 rounded-full border ${
+                currentPage === 1 ? "text-gray-300" : "text-gray-700"
+              }`}
             >
-              <FaArrowAltCircleLeft />
+              <HiChevronLeft className="h-5 w-5" />
             </button>
-            {renderPaginationButtons()}
+            <span className="text-gray-700">
+              Página <strong>{currentPage}</strong> de{" "}
+              <strong>{totalPages}</strong>
+            </span>
             <button
-              onClick={() => goToPage(currentPage + 1)}
+              onClick={next}
               disabled={currentPage === totalPages}
-              className="px-2 py-1 bg-white text-gray-700 hover:bg-hoverColor border border-borderColor hover:text-textHoverColor disabled:opacity-50 rounded-md"
+              className={`p-1 rounded-full border ${
+                currentPage === totalPages ? "text-gray-300" : "text-gray-700"
+              }`}
             >
-              <FaArrowAltCircleRight />
+              <HiChevronRight className="h-5 w-5" />
             </button>
           </div>
         </div>
