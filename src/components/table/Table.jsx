@@ -99,7 +99,7 @@ const TableComponent = ({ data = [], search }) => {
         </div>
       )}
 
-      <div className="overflow-y-auto max-h-[400px] w-full custom-scrollbar">
+      <div className="overflow-y-auto max-h-[400px] w-full custom-scrollbar relative">
         <table className="w-full text-sm text-left text-gray-700 border border-gray-300">
           <thead className="bg-mainTableColor text-white sticky top-0 z-10">
             <tr>
@@ -137,33 +137,35 @@ const TableComponent = ({ data = [], search }) => {
         </table>
       </div>
 
-      <div className="flex justify-between items-center w-full md:w-3/4 mt-4">
-        {/* Filtro de columnas */}
-        <TableFilter
-          columns={data.length > 0 ? Object.keys(data[0]) : []}
-          selectedColumns={selectedColumns}
-          onToggleColumn={handleColumnToggle}
-        />
+      {data.length > 0 && (
+        <div className="flex justify-between items-center w-full md:w-3/4 mt-4">
+          {/* Filtro de columnas */}
+          <TableFilter
+            columns={data.length > 0 ? Object.keys(data[0]) : []}
+            selectedColumns={selectedColumns}
+            onToggleColumn={handleColumnToggle}
+          />
 
-        {/* Paginación */}
-        <div className="flex space-x-1">
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-2 py-1 bg-white text-gray-700 hover:bg-hoverColor border border-borderColor hover:text-textHoverColor disabled:opacity-50 rounded-md"
-          >
-            <FaArrowAltCircleLeft />
-          </button>
-          {renderPaginationButtons()}
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-2 py-1 bg-white text-gray-700 hover:bg-hoverColor border border-borderColor hover:text-textHoverColor disabled:opacity-50 rounded-md"
-          >
-            <FaArrowAltCircleRight />
-          </button>
+          {/* Paginación */}
+          <div className="flex space-x-1">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-2 py-1 bg-white text-gray-700 hover:bg-hoverColor border border-borderColor hover:text-textHoverColor disabled:opacity-50 rounded-md"
+            >
+              <FaArrowAltCircleLeft />
+            </button>
+            {renderPaginationButtons()}
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-2 py-1 bg-white text-gray-700 hover:bg-hoverColor border border-borderColor hover:text-textHoverColor disabled:opacity-50 rounded-md"
+            >
+              <FaArrowAltCircleRight />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
