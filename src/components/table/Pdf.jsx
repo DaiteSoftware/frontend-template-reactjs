@@ -1,6 +1,7 @@
 import React from "react";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { FaFilePdf } from "react-icons/fa6";
 
 const formatColumnTitle = (title) => {
   return title
@@ -55,7 +56,14 @@ const TableToPDF = ({ data, selectedColumns }) => {
     doc.save("table.pdf");
   };
 
-  return <button onClick={handleDownloadPDF}>Generar PDF</button>;
+  return (
+    <button
+      onClick={handleDownloadPDF}
+      className="bg-white text-gray-700 px-2 py-1 border border-borderColor focus:outline-none hover:bg-hoverColor hover:text-textHoverColor rounded-r-md text-center flex justify-center items-center gap-1"
+    >
+      PDF <FaFilePdf />
+    </button>
+  );
 };
 
 export default TableToPDF;
