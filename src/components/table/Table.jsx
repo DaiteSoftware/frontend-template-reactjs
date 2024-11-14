@@ -126,7 +126,7 @@ const TableComponent = ({ data = [], search }) => {
       {data.length > 0 && (
         <div className="flex justify-between items-center w-full mt-2">
           {/* Agrupando los botones de Filtro, Excel y PDF */}
-          <div className="flex items-center gap-4    ">
+          <div className="flex items-center gap-0    ">
             <TableFilter
               columns={data.length > 0 ? Object.keys(data[0]) : []}
               selectedColumns={selectedColumns}
