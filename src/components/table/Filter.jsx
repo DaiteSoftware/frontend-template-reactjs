@@ -3,15 +3,33 @@ import { useRef, useState } from "react";
 
 const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
+  // Maneja el cambio de estado del dropdown
   const handleToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
 
   const handleColumnToggle = (column) => {
     onToggleColumn(column);
+  };
+
+  // Maneja la activación/desactivación de todos los checkboxes
+  const handleSelectAllToggle = () => {
+    setSelectAll((prev) => !prev);
+    if (!selectAll) {
+      columns.forEach((column) => {
+        if (!selectedColumns.includes(column)) {
+          onToggleColumn(column);
+        }
+      });
+    } else {
+      selectedColumns.forEach((column) => {
+        onToggleColumn(column);
+      });
+    }
   };
 
   return (
@@ -24,7 +42,7 @@ const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
             setIsOpen(false);
           }
         }}
-        className="bg-white text-gray-700 px-2 py-1 rounded-md focus:outline-none hover:bg-hoverColor flex justify-center items-center border border-borderColor hover:text-textHoverColor"
+        className="bg-white text-gray-700 px-2 py-1  focus:outline-none hover:bg-hoverColor flex justify-center items-center border border-borderColor hover:text-textHoverColor rounded-l-md"
       >
         <FaFilter /> Filtrar
       </button>
@@ -39,6 +57,17 @@ const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
           }}
           className="absolute bottom-12 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10 p-2"
         >
+          {/* Checkbox para seleccionar/deseleccionar todos */}
+          <div className="flex items-center space-x-2 py-1 cursor-pointer hover:bg-gray-100 px-2 rounded">
+            <input
+              type="checkbox"
+              checked={selectAll}
+              onChange={handleSelectAllToggle}
+              className="h-4 w-4 border-gray-300 rounded"
+            />
+            <span className="text-sm">Todos</span>
+          </div>
+
           <div className="max-h-40 overflow-y-auto">
             {columns.map((column) => (
               <div
