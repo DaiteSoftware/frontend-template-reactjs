@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import TableFilter from "./Filter";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import TableToExcel from "./Excel";
+import TableToPDF from "./Pdf";
 
 const TableComponent = ({ data = [], search }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -17,6 +19,7 @@ const TableComponent = ({ data = [], search }) => {
     }
   }, [data]);
 
+  // Filtrar datos según el término de búsqueda y las columnas seleccionadas
   const filteredData = data.filter((row) =>
     selectedColumns.some((col) =>
       row[col]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
@@ -52,7 +55,6 @@ const TableComponent = ({ data = [], search }) => {
             originalColumnOrder.indexOf(a) - originalColumnOrder.indexOf(b)
         );
       }
-
       return updatedColumns;
     });
   };
@@ -121,14 +123,23 @@ const TableComponent = ({ data = [], search }) => {
         </table>
       </div>
 
-      {data.length > 0 && totalPages > 1 && (
+      {data.length > 0 && (
         <div className="flex justify-between items-center w-full mt-2">
-          <TableFilter
-            columns={data.length > 0 ? Object.keys(data[0]) : []}
-            selectedColumns={selectedColumns}
-            onToggleColumn={handleColumnToggle}
-          />
+          {/* Agrupando los botones de Filtro, Excel y PDF */}
+          <div className="flex items-center gap-4    ">
+            <TableFilter
+              columns={data.length > 0 ? Object.keys(data[0]) : []}
+              selectedColumns={selectedColumns}
+              onToggleColumn={handleColumnToggle}
+            />
+            <TableToExcel
+              data={filteredData}
+              selectedColumns={selectedColumns}
+            />
+            <TableToPDF data={filteredData} selectedColumns={selectedColumns} />
+          </div>
 
+          {/* Paginación */}
           <div className="flex items-center gap-8">
             <button
               onClick={prev}
