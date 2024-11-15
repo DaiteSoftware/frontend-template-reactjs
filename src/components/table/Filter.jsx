@@ -7,7 +7,6 @@ const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
-  // Maneja el cambio de estado del dropdown
   const handleToggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
@@ -16,7 +15,6 @@ const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
     onToggleColumn(column);
   };
 
-  // Maneja la activación/desactivación de todos los checkboxes
   const handleSelectAllToggle = () => {
     setSelectAll((prev) => !prev);
     if (!selectAll) {
@@ -42,7 +40,7 @@ const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
             setIsOpen(false);
           }
         }}
-        className="bg-white text-gray-700 px-2 py-1  focus:outline-none hover:bg-hoverColor flex justify-center items-center border border-borderColor hover:text-textHoverColor rounded-l-md"
+        className="bg-white text-gray-700 px-2 py-1 focus:outline-none hover:bg-hoverColor flex justify-center items-center border border-borderColor hover:text-textHoverColor rounded-l-md"
       >
         <FaFilter /> Filtrar
       </button>
@@ -50,11 +48,7 @@ const TableFilter = ({ columns, selectedColumns, onToggleColumn }) => {
         <div
           ref={dropdownRef}
           tabIndex={-1}
-          onBlur={(e) => {
-            if (!buttonRef.current.contains(e.relatedTarget)) {
-              setIsOpen(false);
-            }
-          }}
+          onMouseDown={(e) => e.preventDefault()}
           className="absolute bottom-12 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10 p-2"
         >
           {/* Checkbox para seleccionar/deseleccionar todos */}
