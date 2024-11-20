@@ -3,12 +3,14 @@ import TableFilter from "./Filter";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import TableToExcel from "./Excel";
 import TableToPDF from "./Pdf";
+import { FaSortAlphaDownAlt, FaSortAlphaUp } from "react-icons/fa";
 
 const TableComponent = ({ data = [], search }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const rowsPerPage = 10;
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const rowsPerPage = 50;
 
   useEffect(() => {
     if (data.length > 0) {
@@ -19,15 +21,41 @@ const TableComponent = ({ data = [], search }) => {
     }
   }, [data]);
 
-  // Filtrar datos según el término de búsqueda y las columnas seleccionadas
-  const filteredData = data.filter((row) =>
+  const handleSort = (key) => {
+    setSortConfig((prevConfig) => {
+      const direction =
+        prevConfig.key === key && prevConfig.direction === "asc"
+          ? "desc"
+          : "asc";
+      return { key, direction };
+    });
+  };
+
+  const sortedData = [...data].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+
+    if (aValue == null) return 1;
+    if (bValue == null) return -1;
+
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      return sortConfig.direction === "asc" ? aValue - bValue : bValue - aValue;
+    }
+
+    return sortConfig.direction === "asc"
+      ? aValue.toString().localeCompare(bValue.toString())
+      : bValue.toString().localeCompare(aValue.toString());
+  });
+
+  const filteredData = sortedData.filter((row) =>
     selectedColumns.some((col) =>
       row[col]?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-
   const currentData = filteredData.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
@@ -85,26 +113,51 @@ const TableComponent = ({ data = [], search }) => {
         </div>
       )}
 
-      <div className="overflow-y-auto max-h-[400px] w-full custom-scrollbar relative">
+      <div className="overflow-y-auto max-h-[410px] w-full custom-scrollbar relative">
         <table className="w-full text-xs text-left text-gray-700 border border-gray-300">
           <thead className="bg-mainTableColor text-white sticky top-0 z-10">
             <tr>
               {selectedColumns.map((col) => (
-                <th key={col} className="px-2 py-1">
-                  {col
-                    .replace(/_/g, " ")
-                    .replace(/\b\w/g, (l) => l.toUpperCase())}
+                <th
+                  key={col}
+                  className="px-8 py-2 cursor-pointer"
+                  onClick={() => handleSort(col)}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="whitespace-nowrap">
+                      {col
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (l) => l.toUpperCase())}
+                    </span>
+                    {sortConfig.key === col && (
+                      <span className="ml-1">
+                        {sortConfig.direction === "asc" ? (
+                          <FaSortAlphaUp />
+                        ) : (
+                          <FaSortAlphaDownAlt />
+                        )}
+                      </span>
+                    )}
+                  </div>
                 </th>
               ))}
             </tr>
           </thead>
+
           <tbody>
             {currentData.length > 0 ? (
               currentData.map((row, index) => (
-                <tr key={index} className="odd:bg-white even:bg-gray-100">
+                <tr
+                  key={index}
+                  className="odd:bg-zebraPrimary even:bg-zebraColor"
+                >
                   {selectedColumns.map((col) => (
-                    <td key={col} className="px-2 py-1 border-t">
-                      {row[col] ? row[col].toString() : "N/A"}
+                    <td key={col} className="px-8 py-1 border-t">
+                      <div className="flex items-center justify-between">
+                        <span className="whitespace-nowrap">
+                          {row[col] ? row[col].toString() : "N/A"}
+                        </span>
+                      </div>
                     </td>
                   ))}
                 </tr>
@@ -120,13 +173,22 @@ const TableComponent = ({ data = [], search }) => {
               </tr>
             )}
           </tbody>
+          <tfoot>
+            <tr className="sticky bottom-0 bg-gray-200">
+              <td
+                colSpan={selectedColumns.length}
+                className="px-8 py-1 border-t text-left font-semibold text-white bg-mainTableColor"
+              >
+                Total: {filteredData.length}
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
 
       {data.length > 0 && (
         <div className="flex justify-between items-center w-full mt-2">
-          {/* Agrupando los botones de Filtro, Excel y PDF */}
-          <div className="flex items-center gap-0    ">
+          <div className="flex items-center gap-0">
             <TableFilter
               columns={data.length > 0 ? Object.keys(data[0]) : []}
               selectedColumns={selectedColumns}
@@ -139,7 +201,6 @@ const TableComponent = ({ data = [], search }) => {
             <TableToPDF data={filteredData} selectedColumns={selectedColumns} />
           </div>
 
-          {/* Paginación */}
           <div className="flex items-center gap-8">
             <button
               onClick={prev}
